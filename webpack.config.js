@@ -1,22 +1,25 @@
-
-var StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin')
+var path = require('path');
+var StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
 module.exports = {
 
-  entry: './src/index.js',
+  entry: path.join(__dirname, '/src/index.js'),
 
   output: {
     filename: 'index.js',
-    path: 'lib',
+    path: path.join(__dirname, 'lib'),
     // IMPORTANT!
     // You must compile to UMD or CommonJS
     // so it can be required in a Node context:
     libraryTarget: 'umd'
   },
 
+  devServer: { inline: false },
+
   plugins: [
     new StaticSiteGeneratorPlugin({
       paths: [
+        '/',
         '/hello/',
         '/world/'
       ],
