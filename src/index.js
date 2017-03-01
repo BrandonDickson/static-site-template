@@ -1,4 +1,19 @@
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 
-module.exports = function render(locals) {
-  return '<html>' + locals.greet + ' from' + locals.path + '</html>';
-}
+const App = ({ greet, path }) =>
+  <div>
+    <h1>{ `${greet} from ${path}` }</h1>
+  </div>
+
+
+export default locals =>
+  `
+  <html>
+    <head>
+    </head>
+    <body>
+      ${ ReactDOMServer.renderToString(<App {...locals} />) }
+    </body>
+  </html>
+  `
