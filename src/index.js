@@ -2,15 +2,25 @@ import React from 'react'
 import { Router, Route, RouterContext, browserHistory, match } from 'react-router'
 import { render } from 'react-dom'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import Helmet from 'react-helmet'
 
 const Home = () =>
-  <h1>Welcome to home page</h1>
+  <div>
+    <Helmet title="Home Page" />
+    <h1>Welcome to home page</h1>
+  </div>
 
 const Hello = () =>
-  <h1>Welcome to hello page</h1>
+  <div>
+    <Helmet title="Hello Page" />
+    <h1>Welcome to hello page</h1>
+  </div>
 
 const World = () =>
-  <h1>Welcome to world page</h1>
+  <div>
+    <Helmet title="World Page" />
+    <h1>Welcome to world page</h1>
+  </div>
 
 const routes =
   <Router history={ browserHistory }>
@@ -35,17 +45,22 @@ export default (locals, next) =>
       next(error)
     else if (redirectLocation)
       next(new Error("Static rendering cannot handle redirects..."))
-    else if (props)
-      next(null, renderToStaticMarkup(
+    else if (props) {
+      const head = Helmet.rewind()
+      const html = `
           <html>
             <head>
+              ${ head.title.toString() }
             </head>
             <body>
-              <div id="root" dangerouslySetInnerHTML={{ __html: renderToString(<RouterContext {...props} />) }} />
+              <div id="root">
+                ${ renderToString(<RouterContext {...props} />) }
+              </div>
               <script type="text/javascript" src="index.js" />
             </body>
           </html>
-        )
-      )
+        `
+      next(null, html)
+    }
     else next(new Error(`Unable to resolve route ${ locals.path }`))
   })
