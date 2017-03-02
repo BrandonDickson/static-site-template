@@ -1,33 +1,9 @@
 import React from 'react'
-import { Router, Route, RouterContext, browserHistory, match } from 'react-router'
+import { RouterContext, match } from 'react-router'
 import { render } from 'react-dom'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
 import Helmet from 'react-helmet'
-
-const Home = () =>
-  <div>
-    <Helmet title="Home Page" />
-    <h1>Welcome to home page</h1>
-  </div>
-
-const Hello = () =>
-  <div>
-    <Helmet title="Hello Page" />
-    <h1>Welcome to hello page</h1>
-  </div>
-
-const World = () =>
-  <div>
-    <Helmet title="World Page" />
-    <h1>Welcome to world page</h1>
-  </div>
-
-const routes =
-  <Router history={ browserHistory }>
-    <Route path="/" component={ Home } />
-    <Route path="/hello/" component={ Hello } />
-    <Route path="/world/" component={ World } />
-  </Router>
+import routes from './routes'
 
 if (typeof document !== "undefined") {
 
