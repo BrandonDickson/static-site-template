@@ -21,10 +21,15 @@ module.exports = () => ({
       rules: [
         {
           test:/\.js$/,
+          exclude: '/node_modules/',
+          use: ['babel-loader']
+        },
+        {
+          test: /\.css$/,
           use: [
-            {
-              loader: 'babel-loader'
-            }
+            'style-loader',
+            'css-loader?modules',
+            'postcss-loader'
           ]
         }
       ]
