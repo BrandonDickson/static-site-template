@@ -2,13 +2,28 @@ import React from 'react'
 import { RouterContext, match } from 'react-router'
 import { render } from 'react-dom'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { AppContainer } from 'react-hot-loader'
 import Helmet from 'react-helmet'
+import App from './components/App'
 import routes from './routes'
 
 if (typeof document !== "undefined") {
 
+  const renderApp = (Component) =>
+    render(
+      <AppContainer>
+        <Component />
+      </AppContainer>
+      , document.getElementById('root')
+    )
+
   // do client side mounting
-  render(routes, document.getElementById('root'))
+  renderApp(App);
+
+  // Hot Module Replacement API
+  if (module.hot) {
+    module.hot.accept('./components/App', () => renderApp(App))
+  }
 
 }
 
@@ -29,10 +44,9 @@ export default (locals, next) =>
               ${ head.title.toString() }
             </head>
             <body>
-              <div id="root">
-                ${ renderToString(<RouterContext {...props} />) }
-              </div>
-              <script type="text/javascript" src="index.js" />
+              <div id="root">${ renderToString(<RouterContext {...props} />) }</div>
+              <script type="text/javascript" src="hmr.js"></script>
+              <script type="text/javascript" src="main.js"></script>
             </body>
           </html>
         `
